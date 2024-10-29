@@ -41,11 +41,14 @@ exports.login = async(req, res) => {
     }
 
     const user = await User.findOne( {email} ).select("+password");
-    console.log(user);
+    // console.log(user);
     
 
     if(email && (!(await user.correctPassword(password , user.password)))){
-        return res.send("inccorect pass")
+        res.status(404).json({
+            status : 'fail',
+            message : 'Password is incorrect'
+        })
     }
 
     const token = signToken(user);
